@@ -2,7 +2,9 @@
 param(
     [Parameter(Position = 0, Mandatory)]
     [ValidateNotNullOrEmpty()]
-    [pscustomobject[]]$UserObj
+    [pscustomobject[]]$UserObj,
+    [Parameter(Position = 1)]
+    [int]$ThrottleLimit = 5
 )
 
 #These variables are used for verbose information while creating jobs.
@@ -11,7 +13,7 @@ $loopCount = 0
 
 <#
     Create threaded jobs to get the data. This will speed up the data gather process, which is especially useful when there are over 1,000 user objects.
-    The default setup for 'Start-ThreadJob' limits the parallel load to **5 threads at once**. We could bump it up higher using the '-ThrottleLimit' param.
+    By default it will only run 5 jobs at once. This can be controlled with the '-ThrottleLimit' parameter.
 
     During my tests, I had:
         - 1,890 user objects to process
@@ -25,7 +27,7 @@ $threadedJobs = foreach ($user in $UserObj) {
     Write-Verbose "Creating thread job $($loopCount) out of $($userObjCount)."
     Start-ThreadJob -ScriptBlock {
         .\Get-AadUserMfaMethods.ps1 -UserObj $args[0]
-    } -ArgumentList $user
+    } -ThrottleLimit $ThrottleLimit -ArgumentList $user
 }
 
 #Instead of running 'Wait-Job', we're running a while statement so we can monitor that status of the jobs.
