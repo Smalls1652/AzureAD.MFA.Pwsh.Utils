@@ -2,32 +2,58 @@
 param(
     [Parameter(Position = 0, Mandatory)]
     [ValidateNotNullOrEmpty()]
-    [string[]]$UserId,
-    [Parameter(Position = 1)]
-    [switch]$RunGarbageCollection
+    [pscustomobject[]]$UserObj
 )
 
-$userIdCount = ($UserId | Measure-Object).Count
+#These variables are used for verbose information while creating jobs.
+$userObjCount = ($UserObj | Measure-Object).Count
 $loopCount = 0
 
-$threadedJobs = foreach ($uid in $UserId) {
+<#
+    Create threaded jobs to get the data. This will speed up the data gather process, which is especially useful when there are over 1,000 user objects.
+    The default setup for 'Start-ThreadJob' limits the parallel load to **5 threads at once**. We could bump it up higher using the '-ThrottleLimit' param.
+
+    During my tests, I had:
+        - 1,890 user objects to process
+        - Running synchronously it took:
+            * 
+        - Running asynchronously (Using parallel threads) it took:
+            * 6 minutes and 5 seconds (00:06:05)
+#>
+$threadedJobs = foreach ($user in $UserObj) {
     $loopCount++
-    Write-Verbose "Creating thread job $($loopCount) out of $($userIdCount)."
+    Write-Verbose "Creating thread job $($loopCount) out of $($userObjCount)."
     Start-ThreadJob -ScriptBlock {
-        .\Get-AadUserMfaMethods.ps1 -UserId $args[0]
-        $null = [System.GC]::Collect()
-    } -ThrottleLimit 10 -ArgumentList $uid
+        .\Get-AadUserMfaMethods.ps1 -UserObj $args[0]
+    } -ArgumentList $user
 }
 
-Write-Verbose "Waiting for all jobs to finish."
-$receivedData = $threadedJobs | Wait-Job | Receive-Job
+#Instead of running 'Wait-Job', we're running a while statement so we can monitor that status of the jobs.
+while (($threadedJobs.State -contains "Running") -and ($threadedJobs.State -contains "NotStarted")) {
+    $completedCount = ($threadedJobs | Where-Object { $PSItem.State -eq "Completed" } | Measure-Object).Count
+    $notStartedCount = ($threadedJobs | Where-Object { $PSItem.State -eq "NotStarted" } | Measure-Object).Count
+
+    #Should probably switch to 'Write-Progress', since it won't be as taxing as it's only executed every 10 seconds.
+    Write-Verbose "`n/ Job Status /`nTotal Jobs Completed: $($completedCount)`nJobs Not Started: $($notStartedCount)`n-------------------"
+
+    #Need to put a limiter in here (Sleep for 10 seconds) so it's not constantly outputting information and wasting CPU resources.
+    Start-Sleep -Seconds 10
+}
+
+#Receive the data from the jobs and remove them.
+$receivedData = $threadedJobs | Receive-Job
 $threadedJobs | Remove-Job -Force
 
-switch ($RunGarbageCollection) {
-    $true {
-        Write-Warning "Running garbage collection."
-        $null = [System.GC]::Collect()
-    }
-}
+<#
+    Because of the amount of memory that can be used during this script, we'll forcefully run garbage collection.
+    
+    I've seen memory usage for pwsh.exe spike on a Windows and macOS system to over 3GB during execution.
+    This can be problematic if that memory never gets released. 
+    Forcefully running garbage collection dropped memory usage down from 2.6GB during one run to ~400MB afterwards.
+
+    This isn't an ideal setup, if I'm being honest. I'm looking into alternative ways of ensuring memory usage doesn't balloon during execution and afterwards.
+#>
+Write-Warning "Running garbage collection."
+$null = [System.GC]::Collect()
 
 return $receivedData
