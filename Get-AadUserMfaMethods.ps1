@@ -17,6 +17,7 @@ begin {
         [string]$UserPrincipalName
         [MfaMethodType[]]$MfaMethods
         [int]$MethodCount
+        [int]$UsableSignInMethodCount
     }
 }
 
@@ -86,10 +87,11 @@ process {
         }
 
         $returnData = [AadUserInfo]@{
-            "UserId"            = $user.Id;
-            "UserPrincipalName" = $user.UserPrincipalName;
-            "MfaMethods"        = $parsedUserMethods;
-            "MethodCount"       = ($parsedUserMethods | Measure-Object).Count;
+            "UserId"                  = $user.Id;
+            "UserPrincipalName"       = $user.UserPrincipalName;
+            "MfaMethods"              = $parsedUserMethods;
+            "MethodCount"             = ($parsedUserMethods | Measure-Object).Count;
+            "UsableSignInMethodCount" = ($parsedUserMethods | Where-Object { $PSItem.IsUsableAsPrimary -eq $true } | Measure-Object).Count;
         }
 
         $returnData
