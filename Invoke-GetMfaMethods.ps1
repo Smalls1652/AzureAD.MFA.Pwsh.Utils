@@ -18,7 +18,7 @@ $loopCount = 0
     During my tests, I had:
         - 1,890 user objects to process
         - Running synchronously it took:
-            * 
+            * 30 minutes and 43 seconds (00:30:43)
         - Running asynchronously (Using parallel threads) it took:
             * 6 minutes and 5 seconds (00:06:05)
 #>
