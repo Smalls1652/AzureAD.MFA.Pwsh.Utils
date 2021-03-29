@@ -16,8 +16,10 @@ filter UserIdsNotInList {
     }
 }
 
+Write-Verbose "Getting group object"
 $groupObj = Get-MgGroup -GroupId $GroupId -ErrorAction "Stop"
 
+Write-Verbose "Getting current group members."
 $groupMembersBase = Get-MgGroupTransitiveMember -GroupId $groupObj.Id -All
 
 <#
@@ -27,6 +29,7 @@ foreach ($member in $groupMembersBase) {
 }
 #>
 
+Write-Verbose "Comparing input users."
 $usersNotEnabled = $UserObjects | UserIdsNotInList -InputObj $groupMembersBase
 
 return $usersNotEnabled
