@@ -7,20 +7,6 @@ function Get-AadUserMfaMethods {
     )
 
     begin {
-        class MfaMethodType {
-            [string]$MethodName
-            [string]$MethodId
-            [bool]$IsUsableAsPrimary
-        }
-
-        class AadUserInfo {
-            [string]$UserId
-            [string]$UserPrincipalName
-            [MfaMethodType[]]$MfaMethods
-            [int]$MethodCount
-            [int]$UsableSignInMethodCount
-        }
-
         class GraphBatchBody {
             [GraphBatchRequest[]]$requests
         }
@@ -97,13 +83,13 @@ function Get-AadUserMfaMethods {
 
             foreach ($rspItem in $batchRequestRsp.responses) {
                 $userMethods = $rspItem.body.value
-                $parsedUserMethods = [System.Collections.Generic.List[MfaMethodType]]::new()
+                $parsedUserMethods = [System.Collections.Generic.List[AzureAD.MFA.Pwsh.Models.MfaMethodType]]::new()
                 foreach ($method in $userMethods) {
                     $methodObj = $null
 
                     switch ($method.'@odata.type') {
                         "#microsoft.graph.fido2AuthenticationMethod" {
-                            $methodObj = [MfaMethodType]@{
+                            $methodObj = [AzureAD.MFA.Pwsh.Models.MfaMethodType]@{
                                 "MethodName"        = "FIDO2 Security Key";
                                 "MethodId"          = $method.id;
                                 "IsUsableAsPrimary" = $true;
@@ -114,7 +100,7 @@ function Get-AadUserMfaMethods {
                         "#microsoft.graph.phoneAuthenticationMethod" {
                             switch ($method.phoneType) {
                                 "mobile" {
-                                    $methodObj = [MfaMethodType]@{
+                                    $methodObj = [AzureAD.MFA.Pwsh.Models.MfaMethodType]@{
                                         "MethodName"        = "Mobile Phone";
                                         "MethodId"          = $method.id;
                                         "IsUsableAsPrimary" = $true;
@@ -126,7 +112,7 @@ function Get-AadUserMfaMethods {
                         }
 
                         "#microsoft.graph.emailAuthenticationMethod" {
-                            $methodObj = [MfaMethodType]@{
+                            $methodObj = [AzureAD.MFA.Pwsh.Models.MfaMethodType]@{
                                 "MethodName"        = "Email";
                                 "MethodId"          = $method.id;
                                 "IsUsableAsPrimary" = $false;
@@ -135,7 +121,7 @@ function Get-AadUserMfaMethods {
                         }
 
                         "#microsoft.graph.microsoftAuthenticatorAuthenticationMethod" {
-                            $methodObj = [MfaMethodType]@{
+                            $methodObj = [AzureAD.MFA.Pwsh.Models.MfaMethodType]@{
                                 "MethodName"        = "Authenticator App (TOTP/Push Notification)";
                                 "MethodId"          = $method.id;
                                 "IsUsableAsPrimary" = $true;
@@ -157,7 +143,7 @@ function Get-AadUserMfaMethods {
 
                 $user = $UserObj | Where-Object { $PSItem.Id -eq $userIdItem }
 
-                $returnData = [AadUserInfo]@{
+                $returnData = [AzureAD.MFA.Pwsh.Models.AadUserInfo]@{
                     "UserId"                  = $user.Id;
                     "UserPrincipalName"       = $user.UserPrincipalName;
                     "MfaMethods"              = $parsedUserMethods;
@@ -170,7 +156,6 @@ function Get-AadUserMfaMethods {
 
             $startCount = ($startCount + $maxBatchRequests)
             $endCount = ($endCount + $maxBatchRequests)
-
         }
     }
 }
