@@ -18,7 +18,6 @@ begin {
         [MfaMethodType[]]$MfaMethods
         [int]$MethodCount
         [int]$UsableSignInMethodCount
-        [pscustomobject]$RawBatchRsp
     }
 
     class GraphBatchBody {
@@ -83,7 +82,7 @@ process {
                     $retryAfterHeader = [int](($batchRequestRsp.responses.headers.'Retry-After' | Sort-Object)[-1])
                     $retryInSeconds = ($retryAfterHeader + 15)
                     Write-Warning "One or more items in the batch request were throttled."
-                    Write-Warning "Waiting for '$($retryInSeconds) seconds' to rerun the requests."
+                    Write-Warning "Waiting for '$($retryInSeconds) second(s)' to rerun the requests."
                     Start-Sleep -Seconds $retryInSeconds
                     break
                 }
@@ -163,7 +162,6 @@ process {
                 "MfaMethods"              = $parsedUserMethods;
                 "MethodCount"             = ($parsedUserMethods | Measure-Object).Count;
                 "UsableSignInMethodCount" = ($parsedUserMethods | Where-Object { $PSItem.IsUsableAsPrimary -eq $true } | Measure-Object).Count;
-                "RawBatchRsp"             = $rspItem;
             }
     
             $returnData
