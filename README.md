@@ -1,24 +1,24 @@
 # Azure AD MFA PowerShell Utilities
 
 - [Azure AD MFA PowerShell Utilities](#azure-ad-mfa-powershell-utilities)
-  - [Building](#building)
-    - [Requirements](#requirements)
-    - [Using Visual Studio Code](#using-visual-studio-code)
-    - [Using a PowerShell console](#using-a-powershell-console)
-      - [⚠️ Note for Windows users ⚠️](#️-note-for-windows-users-️)
-  - [PowerShell Dependencies](#powershell-dependencies)
-  - [Configuring Microsoft.Graph](#configuring-microsoftgraph)
-  - [Usage](#usage)
-    - [Example](#example)
-  - [Resources](#resources)
+  - [⚒ Building](#-building)
+    - [🧰 Requirements](#-requirements)
+      - [⚠️ Note for Windows users](#️-note-for-windows-users)
+    - [👨‍💻 Using Visual Studio Code](#-using-visual-studio-code)
+    - [🤓 Using a PowerShell console](#-using-a-powershell-console)
+  - [🧾 PowerShell Dependencies](#-powershell-dependencies)
+  - [🗂 Configuring Microsoft.Graph](#-configuring-microsoftgraph)
+  - [⏯ Usage](#-usage)
+    - [🤔 Example](#-example)
+  - [📚 Resources](#-resources)
 
 This repo will contain a set of Azure AD MFA scripts for rolling out MFA to end-users. This is related to utilizing [Azure AD Identity Protection](https://docs.microsoft.com/en-us/azure/active-directory/identity-protection/overview-identity-protection) for a specific subset of users in your Azure AD tenant.
 
 ⚠️ Please keep in mind that this is not _**"production ready"**_. This repo is currently designed for my personal use only for the time being.
 
-## Building
+## ⚒ Building
 
-### Requirements
+### 🧰 Requirements
 
 - [.NET SDK 5.0](https://dotnet.microsoft.com/download)
     - ⚠️ **Since I have not supplied a prebuilt module yet, this will be a requirement to build.**
@@ -33,25 +33,7 @@ This repo will contain a set of Azure AD MFA scripts for rolling out MFA to end-
     - **Linux**
         - ⚠️ _Untested on any distro_
 
-### Using Visual Studio Code
-
-1. Open up the source code's directory with `Visual Studio Code`.
-2. Run the build task by either:
-    - Clicking `Terminal -> Run build task...` in the menu bar
-    - Using the keyboard shortcut
-        - **Windows/Linux**: `Shift+Ctrl+B`
-        - **macOS**: `Shift+Cmd+B`
-3. Wait for the build script to finish.
-4. Once the build script is finished, the module will be located in the `/build/` directory.
-
-### Using a PowerShell console
-
-1. Set your current directory, using `cd` or `Set-Location`, in the console to the source code.
-2. Run this command: `.\RunModuleBuild.ps1`
-3. Wait for the build script to finish.
-4. Once the build script is finished, the module will be located in the `/build/` directory.
-
-#### ⚠️ Note for Windows users ⚠️
+#### ⚠️ Note for Windows users
 
 If an error occurs on **Windows** platforms regarding the _"Execution Policy"_, then you need to change it. Easiest solution is to run this command before running the build script:
 
@@ -65,7 +47,25 @@ Once the execution policy has been changed, re-run the build script command.
 
 For more information about the PowerShell Execution Policy, you can read the [official documentation for it here](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies).
 
-## PowerShell Dependencies
+### 👨‍💻 Using Visual Studio Code
+
+1. Open up the source code's directory with `Visual Studio Code`.
+2. Run the build task by either:
+    - Clicking `Terminal -> Run build task...` in the menu bar
+    - Using the keyboard shortcut
+        - **Windows/Linux**: `Shift+Ctrl+B`
+        - **macOS**: `Shift+Cmd+B`
+3. Wait for the build script to finish.
+4. Once the build script is finished, the module will be located in the `/build/` directory.
+
+### 🤓 Using a PowerShell console
+
+1. Set your current directory, using `cd` or `Set-Location`, in the console to the source code.
+2. Run this command: `.\RunModuleBuild.ps1`
+3. Wait for the build script to finish.
+4. Once the build script is finished, the module will be located in the `/build/` directory.
+
+## 🧾 PowerShell Dependencies
 
 This module is dependant on two modules (At the moment):
 - [Microsoft.Graph.Authentication](https://www.powershellgallery.com/packages/Microsoft.Graph.Authentication/)
@@ -79,7 +79,9 @@ Install-Module -Name "Microsoft.Graph"
 
 The `Microsoft.Graph.Authentication` module is the primary work-horse for interacting with the Microsoft Graph API. The majority of API calls are made from the context created after `Connect-MgGraph` is ran, but not through the official cmdlets. The `System.Net.HttpClient` for making those API calls is created with the `Microsoft.Graph.PowerShell.Authentication.Helpers.HttpHelpers` class' `GetGraphHttpClient(<IAuthContext>authContext)` method.
 
-## Configuring Microsoft.Graph
+----------
+
+## 🗂 Configuring Microsoft.Graph
 
 Due to the nature of how the Microsoft Graph API works, there are some scope permissions you have to configure before you can run the commands in this module successfully. Those scopes are:
 
@@ -106,7 +108,7 @@ Connect-MgGraph -ClientId "<The ApplicationId of the app>" -TenantId "<Your Tena
 
 If you have the certificate stored directly in a variable, you substitute the `-CertificateThumbprint` parameter with the `-Certificate` parameter. Just make sure you supply the variable to the parameter!
 
-## Usage
+## ⏯ Usage
 
 Once the module has been imported into your PowerShell session and you have ran `Connect-MgGraph`, you can run the following commands:
 
@@ -114,7 +116,7 @@ Once the module has been imported into your PowerShell session and you have ran 
 - `Compare-AadUsersWithCorrectPolicies`
 - `Get-AadUserMfaMethods`
 
-### Example
+### 🤔 Example
 
 ```powershell
 #Get users with UserPrincipalNames that end in '@contoso.com' and are licensed with 'Microsoft 365 A5 for Faculty'
@@ -128,7 +130,7 @@ $usersNotEnabledForAadIdp = Compare-AadUsersWithCorrectPolicies -GroupId "522c3e
 $usersMfaMethods = Get-AadUserMfaMethods -UserObj $usersNotEnabledForAadIdp
 ```
 
-## Resources
+## 📚 Resources
 
 - [Microsoft Graph API Reference](https://docs.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0)
   - Endpoints used in module:
