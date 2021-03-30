@@ -15,7 +15,7 @@ function Get-AadUsersWithLicense {
             [DateTime]$Threshold
         )
 
-        if ($PSItem.signInActivity.lastSignInDateTime -ge $Threshold) {
+        if ($PSItem.LastSigninDateTime -ge $Threshold) {
             $PSItem
         }
     }
@@ -29,7 +29,15 @@ function Get-AadUsersWithLicense {
         - If 'accountEnabled' is set to true
 #>
     Write-Verbose "Getting users"
-    $usersWithLicense = Invoke-CustomGraphRequest -GraphVersion beta -Method Get -Resource "/users?`$count=true&`$filter=endsWith(userPrincipalName, '@$($UserDomainName)') and assignedLicenses/any(c:c/skuId eq $($SkuId)) and accountEnabled eq true&`$select=id,userPrincipalName,assignedLicenses,signInActivity&`$orderBy=userPrincipalName"
+    $usersWithLicenseRsp = Invoke-SendGraphApiRequest -GraphVersion beta -Method Get -Resource "/users?`$count=true&`$filter=endsWith(userPrincipalName, '@$($UserDomainName)') and assignedLicenses/any(c:c/skuId eq $($SkuId)) and accountEnabled eq true&`$select=id,userPrincipalName,assignedLicenses,signInActivity&`$orderBy=userPrincipalName" -Verbose:$false
+
+    $usersWithLicense = foreach ($userItem in $usersWithLicenseRsp) {
+        [AzureAD.MFA.Pwsh.Models.Graph.Users.User]@{
+            "UserId" = $userItem.id;
+            "UserPrincipalName" = $userItem.userPrincipalName;
+            "LastSigninDateTime" = $userItem.signInActivity.lastSignInDateTime;
+        }
+    }
 
     #Filter out users who haven't signed into their account in the last 30 days.
     Write-Verbose "Filtering users who haven't signed-in in the last month."

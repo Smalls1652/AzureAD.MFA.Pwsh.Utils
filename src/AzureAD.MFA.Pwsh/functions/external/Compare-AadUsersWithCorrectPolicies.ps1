@@ -5,14 +5,14 @@ function Compare-AadUsersWithCorrectPolicies {
         [ValidateNotNullOrEmpty()]
         [string]$GroupId,
         [Parameter(Position = 1, Mandatory)]
-        [pscustomobject[]]$UserObjects
+        [AzureAD.MFA.Pwsh.Models.Graph.Users.User[]]$UserObjects
     )
 
     filter UserIdsNotInList {
         param(
             [Microsoft.Graph.PowerShell.Models.MicrosoftGraphDirectoryObject[]]$InputObj
         )
-        if ($PSItem.id -notin $groupMembersBase.Id) {
+        if ($PSItem.UserId -notin $groupMembersBase.Id) {
             $PSItem
         }
     }
