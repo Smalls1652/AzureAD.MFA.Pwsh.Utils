@@ -3,9 +3,6 @@ tests/
 
 .DS_Store
 
-# User-specific files
-.vscode/
-
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
