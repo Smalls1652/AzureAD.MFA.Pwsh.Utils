@@ -9,17 +9,6 @@ function Get-AadUsersWithLicense {
         [string]$SkuId = "e97c048c-37a4-45fb-ab50-922fbf07a370" #The default value is for the 'M365 A5 for Faculty' SKU.
     )
 
-    #Filter function for faster processing (Compared to 'Where-Object') of users who have signed into their in the last `n` days.
-    filter FilterByLastSignIn {
-        param(
-            [DateTime]$Threshold
-        )
-
-        if ($PSItem.LastSigninDateTime -ge $Threshold) {
-            $PSItem
-        }
-    }
-
     $lastSignInDateThreshold = [datetime]::Now.AddDays(-30) #There could be users who haven't signed in within the last month, so let's ignore them for now.
 
     <#
