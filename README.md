@@ -65,6 +65,8 @@ The easiest solution to resolve these dependencies is to install the [Microsoft.
 Install-Module -Name "Microsoft.Graph"
 ```
 
+The `Microsoft.Graph.Authentication` module is the primary work-horse for interacting with the Microsoft Graph API. The majority of API calls are made from the context created after `Connect-MgGraph` is ran, but not through the official cmdlets. The `System.Net.HttpClient` for making those API calls is created with the `Microsoft.Graph.PowerShell.Authentication.Helpers.HttpHelpers` class' `GetGraphHttpClient(<IAuthContext>authContext)` method.
+
 ## Configuring Microsoft.Graph
 
 Due to the nature of how the Microsoft Graph API works, there are some scope permissions you have to configure before you can run the commands in this module successfully. Those scopes are:
