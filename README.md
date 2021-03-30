@@ -122,7 +122,7 @@ $licensedUsers = Get-AadUsersWithLicense -DomainName "contoso.com" -SkuId "e97c0
 
 #Get which users aren't in the group with an ID of '522c3e2b-8e39-4b3c-adf4-9b4aa4e0ec47'.
 #This group would be the group that Azure AD Identity Protection policies are being applied to, if you're not targeting all users.
-$usersNotEnabledForAadIdp = Compare-AadUsersWithCorrectPolicies -GroupId "522c3e2b-8e39-4b3c-adf4-9b4aa4e0ec47"
+$usersNotEnabledForAadIdp = Compare-AadUsersWithCorrectPolicies -GroupId "522c3e2b-8e39-4b3c-adf4-9b4aa4e0ec47" -UserObjects $licensedUsers
 
 #Get details on the MFA methods of each user returned from the previous step.
 $usersMfaMethods = Get-AadUserMfaMethods -UserObj $usersNotEnabledForAadIdp
