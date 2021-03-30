@@ -1,8 +1,8 @@
 [CmdletBinding()]
 param(
     [Parameter(Position = 0)]
-    [ValidateSet("Debug", "Release")]
-    [string]$PublishType = "Debug"
+    [ValidateSet("Dev", "Release")]
+    [string]$PublishType = "Dev"
 )
 
 $ScriptLocation = $PSScriptRoot
