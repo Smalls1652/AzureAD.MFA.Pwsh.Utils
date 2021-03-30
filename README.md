@@ -21,17 +21,17 @@ This repo will contain a set of Azure AD MFA scripts for rolling out MFA to end-
 ### Requirements
 
 - [.NET SDK 5.0](https://dotnet.microsoft.com/download)
-    - **Since I have not supplied a prebuilt module yet, this will be a requirement to build.**
+    - ⚠️ **Since I have not supplied a prebuilt module yet, this will be a requirement to build.**
 - PowerShell
-    - [x] **Recommended**: [PowerShell 7.0 or higher](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
-    - [ ] At the minimum, `Windows PowerShell 5.1` should work; however, I have not done any testing with it.
+    - ✅ **Recommended**: [PowerShell 7.0 or higher](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
+    - ⚠️ At the minimum, `Windows PowerShell 5.1` should work; however, I have not done any testing with it.
 - Platforms:
     - **Windows 10**
-        - [x] _Tested on the `20H2` feature update release_
+        - ✅ _Tested on the `20H2` feature update release_
     - **macOS**
-        - [x] _Tested on Big Sur `11.2.3`_
+        - ✅ _Tested on Big Sur `11.2.3`_
     - **Linux**
-        - [ ] _Untested on any distro_
+        - ⚠️ _Untested on any distro_
 
 ### Using Visual Studio Code
 
