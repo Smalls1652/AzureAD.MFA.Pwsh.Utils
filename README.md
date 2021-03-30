@@ -1,3 +1,5 @@
+# Azure AD MFA PowerShell Utilities
+
 - [Azure AD MFA PowerShell Utilities](#azure-ad-mfa-powershell-utilities)
   - [Building](#building)
     - [Requirements](#requirements)
@@ -9,8 +11,6 @@
   - [Usage](#usage)
     - [Example](#example)
   - [Resources](#resources)
-
-# Azure AD MFA PowerShell Utilities
 
 This repo will contain a set of Azure AD MFA scripts for rolling out MFA to end-users. This is related to utilizing [Azure AD Identity Protection](https://docs.microsoft.com/en-us/azure/active-directory/identity-protection/overview-identity-protection) for a specific subset of users in your Azure AD tenant.
 
