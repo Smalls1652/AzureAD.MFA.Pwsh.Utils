@@ -3,7 +3,7 @@
     - [Requirements](#requirements)
     - [Using Visual Studio Code](#using-visual-studio-code)
     - [Using a PowerShell console](#using-a-powershell-console)
-    - [⚠️ Note for Windows users ⚠️](#️-note-for-windows-users-️)
+      - [⚠️ Note for Windows users ⚠️](#️-note-for-windows-users-️)
   - [PowerShell Dependencies](#powershell-dependencies)
   - [Configuring Microsoft.Graph](#configuring-microsoftgraph)
   - [Usage](#usage)
@@ -51,7 +51,7 @@ This repo will contain a set of Azure AD MFA scripts for rolling out MFA to end-
 3. Wait for the build script to finish.
 4. Once the build script is finished, the module will be located in the `/build/` directory.
 
-### ⚠️ Note for Windows users ⚠️
+#### ⚠️ Note for Windows users ⚠️
 
 If an error occurs on **Windows** platforms regarding the _"Execution Policy"_, then you need to change it. Easiest solution is to run this command before running the build script:
 
