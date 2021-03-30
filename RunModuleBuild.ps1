@@ -8,12 +8,9 @@ param(
 $ScriptLocation = $PSScriptRoot
 
 $buildLogSplat = @{
-    "Tags" = @("BuildLog");
+    "Tags"              = @("BuildLog");
     "InformationAction" = "Continue"
 }
-Write-Information @buildLogSplat -MessageData "Starting build for 'AzureAD.MFA.Pwsh'"
-Write-Information @buildLogSplat -MessageData "---------------------"
-Write-Information @buildLogSplat -MessageData "- Build location: '$($ScriptLocation)'"
 
 $buildDir = Join-Path -Path $ScriptLocation -ChildPath "build\"
 $buildModuleDir = Join-Path -Path $buildDir -ChildPath "AzureAD.MFA.Pwsh\"
@@ -28,21 +25,38 @@ $filesToCopy = [System.Collections.Generic.List[string[]]]@(
     (Join-Path -Path $csProjectPublishDir -ChildPath "AzureAD.MFA.Pwsh.dll")
 )
 
-Write-Information @buildLogSplat -MessageData "- Moving to directory: '$($csProjectDir)'"
-Push-Location -Path $csProjectDir
-
-try {
-    Write-Information @buildLogSplat -MessageData "`- Building class library: 'AzureAD.MFA.Pwsh.Lib'"
-    dotnet clean --nologo --verbosity minimal
-    dotnet publish --nologo --configuration "$($PublishType)" --verbosity minimal /property:PublishWithAspNetCoreTargetManifest=false
-    #Start-Process -FilePath "dotnet" -ArgumentList @("clean") -Wait -NoNewWindow -ErrorAction Stop
-    #Start-Process -FilePath "dotnet" -ArgumentList @("publish", "/property:PublishWithAspNetCoreTargetManifest=false") -Wait -NoNewWindow -ErrorAction Stop
-}
-finally {
-    Write-Information @buildLogSplat -MessageData "- Returning back to root project dir"
-    Pop-Location
+$dotnetProcSplat = @{
+    "FilePath"         = "dotnet";
+    "Wait"             = $true;
+    "NoNewWindow"      = $true;
+    "WorkingDirectory" = $csProjectDir;
+    "ErrorAction"      = "Stop";
 }
 
+$dotnetCleanArgs = @(
+    "clean",
+    "--nologo",
+    "--verbosity minimal"
+)
+
+$dotnetPublishArgs = @(
+    "publish",
+    "--nologo",
+    "--configuration $($PublishType)",
+    "--verbosity minimal",
+    "/property:PublishWithAspNetCoreTargetManifest=false"
+)
+
+Write-Information @buildLogSplat -MessageData "Starting build for 'AzureAD.MFA.Pwsh'"
+Write-Information @buildLogSplat -MessageData "---------------------"
+Write-Information @buildLogSplat -MessageData "- Build location: '$($ScriptLocation)'"
+
+Write-Information @buildLogSplat -MessageData "`- Building class library: 'AzureAD.MFA.Pwsh.Lib'"
+Start-Process @dotnetProcSplat -ArgumentList $dotnetCleanArgs
+Start-Process @dotnetProcSplat -ArgumentList $dotnetPublishArgs
+
+#dotnet clean --nologo --verbosity minimal
+#dotnet publish --nologo --configuration "$($PublishType)" --verbosity minimal /property:PublishWithAspNetCoreTargetManifest=false
 
 if (Test-Path -Path $buildDir) {
     Write-Information @buildLogSplat -MessageData "- Cleaning up previous build"
