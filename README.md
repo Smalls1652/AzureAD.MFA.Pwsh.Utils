@@ -141,3 +141,5 @@ $usersMfaMethods = Get-AadUserMfaMethods -UserObj $usersNotEnabledForAadIdp
 - [Microsoft.Graph PowerShell Module Repo](https://github.com/microsoftgraph/msgraph-sdk-powershell)
   - [Microsoft Docs - Microsoft.Graph PowerShell module - Get started](https://docs.microsoft.com/en-us/graph/powershell/get-started)
   - [Microsoft Docs - Microsoft.Graph PowerShell module - App-only authentication](https://docs.microsoft.com/en-us/graph/powershell/app-only?tabs=azure-portal)
+- [Microsoft Service Plan Identifiers](https://docs.microsoft.com/en-us/azure/active-directory/enterprise-users/licensing-service-plan-reference)
+  - **Useful for finding the specific SKU you're using to find users.**
