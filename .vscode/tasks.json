@@ -1,0 +1,24 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Module (Release)",
+            "type": "shell",
+            "command": ".\\RunModuleBuild.ps1 -PublishType \"Release\"",
+            "detail": "Run the module build script for a release build.",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Module (Dev)",
+            "type": "shell",
+            "command": ".\\RunModuleBuild.ps1 -PublishType \"Dev\"",
+            "detail": "Run the module build script for a dev build.",
+            "group": "build",
+            "problemMatcher": []
+        }
+    ]
+}
