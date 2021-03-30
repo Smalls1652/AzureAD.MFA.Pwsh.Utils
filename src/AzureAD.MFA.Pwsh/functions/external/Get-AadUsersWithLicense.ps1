@@ -18,7 +18,7 @@ function Get-AadUsersWithLicense {
         - If 'accountEnabled' is set to true
 #>
     Write-Verbose "Getting users"
-    $usersWithLicenseRsp = Invoke-SendGraphApiRequest -GraphVersion beta -Method Get -Resource "/users?`$count=true&`$filter=endsWith(userPrincipalName, '@$($UserDomainName)') and assignedLicenses/any(c:c/skuId eq $($SkuId)) and accountEnabled eq true&`$select=id,userPrincipalName,assignedLicenses,signInActivity&`$orderBy=userPrincipalName" -Verbose:$false
+    $usersWithLicenseRsp = Invoke-SendGraphApiRequest -GraphVersion beta -Method Get -Resource "/users?`$count=true&`$filter=endsWith(userPrincipalName, '@$($UserDomainName)') and assignedLicenses/any(c:c/skuId eq $($SkuId)) and accountEnabled eq true&`$select=id,userPrincipalName,assignedLicenses,signInActivity&`$orderBy=userPrincipalName" -Verbose:$false -ErrorAction "Stop"
 
     $usersWithLicense = foreach ($userItem in $usersWithLicenseRsp) {
         [AzureAD.MFA.Pwsh.Models.Graph.Users.User]@{

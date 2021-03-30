@@ -50,7 +50,7 @@ function Get-AadUserMfaMethods {
             #Send the batch requests to the Graph API.
             $requestWasSuccessful = $false
             while ($requestWasSuccessful -eq $false) { #Run the batch request until we set the 'requestWasSuccessful' to true
-                $batchRequestRsp = Invoke-SendGraphApiRequest -GraphVersion "beta" -Method "Post" -Resource "/`$batch" -Body ($batchBodyObj.ConvertToHashtable()) -Verbose:$false
+                $batchRequestRsp = Invoke-SendGraphApiRequest -GraphVersion "beta" -Method "Post" -Resource "/`$batch" -Body ($batchBodyObj.ConvertToHashtable()) -Verbose:$false -ErrorAction "Stop"
 
                 #Check to see if the batch request was successful or if it had been throttled
                 switch (429 -in $batchRequestRsp.responses.status) {

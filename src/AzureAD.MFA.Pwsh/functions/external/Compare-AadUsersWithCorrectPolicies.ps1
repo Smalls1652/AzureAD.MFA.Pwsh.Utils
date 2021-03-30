@@ -12,7 +12,7 @@ function Compare-AadUsersWithCorrectPolicies {
     $groupObj = Get-MgGroup -GroupId $GroupId -ErrorAction "Stop"
 
     Write-Verbose "Getting current group members."
-    $groupMembersBase = Get-MgGroupTransitiveMember -GroupId $groupObj.Id -All
+    $groupMembersBase = Get-MgGroupTransitiveMember -GroupId $groupObj.Id -All -ErrorAction "Stop"
 
     Write-Verbose "Comparing input users."
     $usersNotEnabled = $UserObjects | UserIdsNotInList -InputObj $groupMembersBase
