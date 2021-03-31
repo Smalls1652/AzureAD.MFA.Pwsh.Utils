@@ -27,8 +27,8 @@ $filesToCopy = [System.Collections.Generic.List[string[]]]@(
 
 $dotnetProcSplat = @{
     "FilePath"         = "dotnet";
-    "Wait"             = $true;
     "NoNewWindow"      = $true;
+    "PassThru"         = $true;
     "WorkingDirectory" = $csProjectDir;
     "ErrorAction"      = "Stop";
 }
@@ -51,9 +51,12 @@ Write-Information @buildLogSplat -MessageData "Starting build for 'AzureAD.MFA.P
 Write-Information @buildLogSplat -MessageData "---------------------"
 Write-Information @buildLogSplat -MessageData "- Build location: '$($ScriptLocation)'"
 
-Write-Information @buildLogSplat -MessageData "`- Building class library: 'AzureAD.MFA.Pwsh.Lib'"
-Start-Process @dotnetProcSplat -ArgumentList $dotnetCleanArgs
-Start-Process @dotnetProcSplat -ArgumentList $dotnetPublishArgs
+Write-Information @buildLogSplat -MessageData "- Building class library: 'AzureAD.MFA.Pwsh.Lib'"
+$dotnetCleanProcess = Start-Process @dotnetProcSplat -ArgumentList $dotnetCleanArgs
+Wait-Process -InputObject $dotnetCleanProcess
+
+$dotnetPublishProcess = Start-Process @dotnetProcSplat -ArgumentList $dotnetPublishArgs
+Wait-Process -InputObject $dotnetPublishProcess
 
 #dotnet clean --nologo --verbosity minimal
 #dotnet publish --nologo --configuration "$($PublishType)" --verbosity minimal /property:PublishWithAspNetCoreTargetManifest=false
