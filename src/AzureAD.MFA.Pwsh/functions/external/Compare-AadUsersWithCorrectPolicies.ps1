@@ -5,8 +5,10 @@ function Compare-AadUsersWithCorrectPolicies {
         [ValidateNotNullOrEmpty()]
         [string]$GroupId,
         [Parameter(Position = 1, Mandatory)]
-        [AzureAD.MFA.Pwsh.Models.Graph.Users.User[]]$UserObjects
+        [Microsoft.Graph.PowerShell.Models.MicrosoftGraphUser1[]]$UserObjects
     )
+
+    $null = Test-MsGraphModuleIsConnected -ErrorAction "Stop"
 
     Write-Verbose "Getting group object"
     $groupObj = Get-MgGroup -GroupId $GroupId -ErrorAction "Stop"

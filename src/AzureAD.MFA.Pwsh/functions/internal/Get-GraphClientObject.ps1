@@ -6,21 +6,9 @@ function Get-GraphClientObject {
         [string]$GraphVersion = "v1.0"
     )
 
-    $graphContext = Get-MgContext
+    $graphContext = Get-MsGraphModuleContext -ErrorAction "Stop"
 
-    switch ($null -eq $graphContext) {
-        $true {
-            $PSCmdlet.ThrowTerminatingError(
-                [System.Management.Automation.ErrorRecord]::new(
-                    [System.Exception]::new("No context was found with the 'Microsoft.Graph.Authentication' module. 'Connect-Graph' needs to be ran before running."),
-                    "NoGraphContextFound",
-                    [System.Management.Automation.ErrorCategory]::ObjectNotFound,
-                    $graphContext
-                )
-            )
-            break
-        }
-    }
+    $null = Test-MsGraphModuleProfile -ErrorAction "Stop"
 
     $graphClient = [Microsoft.Graph.PowerShell.Authentication.Helpers.HttpHelpers]::GetGraphHttpClient($graphContext)
 

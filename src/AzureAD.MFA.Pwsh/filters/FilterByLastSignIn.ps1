@@ -3,7 +3,7 @@ filter FilterByLastSignIn {
         [DateTime]$Threshold
     )
 
-    if ($PSItem.LastSigninDateTime -ge $Threshold) {
+    if ($PSItem.SignInActivity.LastSigninDateTime -ge $Threshold) {
         $PSItem
     }
 }

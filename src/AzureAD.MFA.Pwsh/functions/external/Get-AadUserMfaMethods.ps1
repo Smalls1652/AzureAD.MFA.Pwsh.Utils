@@ -3,12 +3,13 @@ function Get-AadUserMfaMethods {
     param(
         [Parameter(Position = 0, Mandatory)]
         [ValidateNotNullOrEmpty()]
-        [AzureAD.MFA.Pwsh.Models.Graph.Users.User[]]$UserObj,
+        [Microsoft.Graph.PowerShell.Models.MicrosoftGraphUser1[]]$UserObj,
         [Parameter(Position = 1)]
         [int]$ThrottleBufferSeconds = 0
     )
 
     process {
+
         $maxBatchRequests = 20 #Max requests in one batch to the Graph API is 20
         $userCount = ($UserObj | Measure-Object).Count
 
@@ -36,7 +37,7 @@ function Get-AadUserMfaMethods {
                 $batchRequestObj = [AzureAD.MFA.Pwsh.Models.Graph.Batch.BatchRequest]@{
                     "id"     = $loopCount;
                     "method" = "GET";
-                    "url"    = "/users/$($item.UserId)/authentication/methods";
+                    "url"    = "/users/$($item.Id)/authentication/methods";
                 }
 
                 $batchRequestList.Add($batchRequestObj)
@@ -143,11 +144,11 @@ function Get-AadUserMfaMethods {
                 #Get the userId from the '@odata.context' property and match it with the user object list provided to the script
                 $userIdMatch = $userIdOdataRegex.Match($rspItem.body.'@odata.context')
                 $userIdItem = $userIdMatch.Groups['userId'].Value
-                $user = $UserObj | Where-Object { $PSItem.UserId -eq $userIdItem }
+                $user = $UserObj | Where-Object { $PSItem.Id -eq $userIdItem }
 
                 #Build the user info object
                 $returnData = [AzureAD.MFA.Pwsh.Models.AadUserInfo]@{
-                    "UserId"                  = $user.UserId;
+                    "UserId"                  = $user.Id;
                     "UserPrincipalName"       = $user.UserPrincipalName;
                     "MfaMethods"              = $parsedUserMethods;
                     "MethodCount"             = ($parsedUserMethods | Measure-Object).Count;
