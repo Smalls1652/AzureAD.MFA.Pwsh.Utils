@@ -20,7 +20,8 @@ function Get-AadUserMfaMethods {
         $userIdOdataRegex = [System.Text.RegularExpressions.Regex]::new("https:\/\/graph.microsoft.com\/(?>v1\.0|beta)\/\`$metadata#users\('(?'userId'.+?)'\)\/authentication\/methods")
 
         while ($startCount -le ($userCount - 1)) {
-            switch ($endCount -ge ($userCount - 1)) { #If the 'endCount' is actually greater than the actual user count, then set it to that.
+            switch ($endCount -ge ($userCount - 1)) {
+                #If the 'endCount' is actually greater than the actual user count, then set it to that.
                 $true {
                     $endCount = ($userCount - 1)
                     break
@@ -49,7 +50,8 @@ function Get-AadUserMfaMethods {
 
             #Send the batch requests to the Graph API.
             $requestWasSuccessful = $false
-            while ($requestWasSuccessful -eq $false) { #Run the batch request until we set the 'requestWasSuccessful' to true
+            while ($requestWasSuccessful -eq $false) {
+                #Run the batch request until we set the 'requestWasSuccessful' to true
                 $batchRequestRsp = Invoke-SendGraphApiRequest -GraphVersion "beta" -Method "Post" -Resource "/`$batch" -Body ($batchBodyObj.ConvertToHashtable()) -Verbose:$false -ErrorAction "Stop"
 
                 #Check to see if the batch request was successful or if it had been throttled
@@ -85,7 +87,8 @@ function Get-AadUserMfaMethods {
                 foreach ($method in $userMethods) {
                     $methodObj = $null
 
-                    switch ($method.'@odata.type') { #Parse each returned method and identify if it's usable for sign-in purposes
+                    switch ($method.'@odata.type') {
+                        #Parse each returned method and identify if it's usable for sign-in purposes
                         "#microsoft.graph.fido2AuthenticationMethod" {
                             $methodObj = [AzureAD.MFA.Pwsh.Models.MfaMethodType]@{
                                 "MethodName"        = "FIDO2 Security Key";
@@ -128,7 +131,8 @@ function Get-AadUserMfaMethods {
                         }
                     }
 
-                    switch ($null -eq $methodObj) { #If 'methodObj' isn't null, then add it to the parsed methods list.
+                    switch ($null -eq $methodObj) {
+                        #If 'methodObj' isn't null, then add it to the parsed methods list.
                         $false {
                             $parsedUserMethods.Add($methodObj)
                             break

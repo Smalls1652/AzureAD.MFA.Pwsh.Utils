@@ -22,8 +22,8 @@ function Get-AadUsersWithLicense {
 
     $usersWithLicense = foreach ($userItem in $usersWithLicenseRsp) {
         [AzureAD.MFA.Pwsh.Models.Graph.Users.User]@{
-            "UserId" = $userItem.id;
-            "UserPrincipalName" = $userItem.userPrincipalName;
+            "UserId"             = $userItem.id;
+            "UserPrincipalName"  = $userItem.userPrincipalName;
             "LastSigninDateTime" = $userItem.signInActivity.lastSignInDateTime;
         }
     }
