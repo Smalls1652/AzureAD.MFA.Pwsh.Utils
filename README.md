@@ -70,6 +70,7 @@ For more information about the PowerShell Execution Policy, you can read the [of
 This module is dependant on two modules (At the moment):
 - [Microsoft.Graph.Authentication](https://www.powershellgallery.com/packages/Microsoft.Graph.Authentication/)
 - [Microsoft.Graph.Groups](https://www.powershellgallery.com/packages/Microsoft.Graph.Groups/)
+- [Microsoft.Graph.Users](https://www.powershellgallery.com/packages/Microsoft.Graph.Users/)
 
 The easiest solution to resolve these dependencies is to install the [Microsoft.Graph](https://www.powershellgallery.com/packages/Microsoft.Graph) module from PowerShell Gallery by running this command:
 
@@ -114,7 +115,7 @@ Once the module has been imported into your PowerShell session and you have ran 
 - `Compare-AadUsersWithCorrectPolicies`
 - `Get-AadUserMfaMethods`
 
-### 🤔 Example
+### 🤔 Examples
 
 ```powershell
 #Get users with UserPrincipalNames that end in '@contoso.com' and are licensed with 'Microsoft 365 A5 for Faculty'
