@@ -117,6 +117,8 @@ Once the module has been imported into your PowerShell session and you have ran 
 
 ### 🤔 Examples
 
+#### Example 01 - Get MFA methods for users licensed and not targeted with Identity Protection policies
+
 ```powershell
 #Get users with UserPrincipalNames that end in '@contoso.com' and are licensed with 'Microsoft 365 A5 for Faculty'
 $licensedUsers = Get-AadUsersWithLicense -DomainName "contoso.com" -SkuId "e97c048c-37a4-45fb-ab50-922fbf07a370"
@@ -127,6 +129,16 @@ $usersNotEnabledForAadIdp = Compare-AadUsersWithCorrectPolicies -GroupId "522c3e
 
 #Get details on the MFA methods of each user returned from the previous step.
 $usersMfaMethods = Get-AadUserMfaMethods -UserObj $usersNotEnabledForAadIdp
+```
+
+#### Example 02 - Get MFA methods for a single user
+
+```powershell
+#Get a user object through the Graph API
+$user = Get-MgUser -UserId "iduncan@greendalecc.edu"
+
+#Get details on the MFA methods on the user's account
+Get-AadUserMfaMethods -UserObj $user
 ```
 
 ## 📚 Resources
