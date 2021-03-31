@@ -146,8 +146,8 @@ Get-AadUserMfaMethods -UserObj $user
 - [Microsoft Graph API Reference](https://docs.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0)
   - Endpoints used in module:
     - [/beta/users | List users](https://docs.microsoft.com/en-us/graph/api/user-list?view=graph-rest-beta&tabs=http)
-    - [/v1.0/groups/{ GroupId } | Get group](https://docs.microsoft.com/en-us/graph/api/group-get?view=graph-rest-1.0&tabs=http)
-    - [/v1.0/groups/{ GroupId }/transitiveMembers | Get transitive members of group](https://docs.microsoft.com/en-us/graph/api/group-list-transitivemembers?view=graph-rest-1.0&tabs=http)
+    - [/beta/groups/{ GroupId } | Get group](https://docs.microsoft.com/en-us/graph/api/group-get?view=graph-rest-beta&tabs=http)
+    - [/beta/groups/{ GroupId }/transitiveMembers | Get transitive members of group](https://docs.microsoft.com/en-us/graph/api/group-list-transitivemembers?view=graph-rest-beta&tabs=http)
     - [/beta/{ UserPrincipalName | UserId }/authentication/methods | List authentication methods for a user](https://docs.microsoft.com/en-us/graph/api/authentication-list-methods?view=graph-rest-beta&tabs=http)
     - [/$batch | Batching multiple requests](https://docs.microsoft.com/en-us/graph/json-batching?context=graph%2Fapi%2F1.0&view=graph-rest-1.0)
   - [Permissions Reference](https://docs.microsoft.com/en-us/graph/permissions-reference)
