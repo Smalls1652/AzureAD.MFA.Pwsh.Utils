@@ -19,7 +19,7 @@ $srcDir = Join-Path -Path $ScriptLocation -ChildPath "src\"
 $pwshProjectDir = Join-Path -Path $srcDir -ChildPath "AzureAD.MFA.Pwsh\"
 
 $csProjectDir = Join-Path -Path $srcDir -ChildPath "AzureAD.MFA.Pwsh.Lib\"
-$csProjectPublishDir = Join-Path -Path $csProjectDir -ChildPath "bin\$($PublishType)\net5.0\publish\"
+$csProjectPublishDir = Join-Path -Path $csProjectDir -ChildPath "bin\$($PublishType)\netstandard2.1\publish\"
 
 $filesToCopy = [System.Collections.Generic.List[string[]]]@(
     (Join-Path -Path $csProjectPublishDir -ChildPath "AzureAD.MFA.Pwsh.dll")
