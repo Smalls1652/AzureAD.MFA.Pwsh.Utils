@@ -11,13 +11,15 @@ function Get-AadUserMfaMethods {
             "SecurityKey",
             "Authenticator",
             "MobilePhone",
-            "OfficePhone"
+            "OfficePhone",
+            "SoftwareOATH"
         )]
         [string[]]$UsableAuthMethods = @(
             "SecurityKey",
             "Authenticator",
             "MobilePhone",
-            "OfficePhone"
+            "OfficePhone",
+            "SoftwareOATH"
         )
     )
 
@@ -30,7 +32,8 @@ function Get-AadUserMfaMethods {
             "Authenticator",
             "MobilePhone",
             "OfficePhone",
-            "Email"
+            "Email",
+            "SoftwareOATH"
         )
 
         foreach ($authMethod in $authMethodTypes) {
@@ -163,6 +166,15 @@ function Get-AadUserMfaMethods {
                                 "MethodName"        = "Authenticator App (TOTP/Push Notification)";
                                 "MethodId"          = $method.id;
                                 "IsUsableAsPrimary" = $usableAuthMethodsList['Authenticator'];
+                            }
+                            break
+                        }
+
+                        "#microsoft.graph.softwareOathAuthenticationMethod" {
+                            $methodObj = [AzureAD.MFA.Pwsh.Models.MfaMethodType]@{
+                                "MethodName"        = "Software OATH Token (TOTP)";
+                                "MethodId"          = $method.id;
+                                "IsUsableAsPrimary" = $usableAuthMethodsList['SoftwareOATH'];
                             }
                             break
                         }
