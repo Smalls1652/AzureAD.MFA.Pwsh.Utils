@@ -9,7 +9,9 @@
   - [🧾 PowerShell Dependencies](#-powershell-dependencies)
   - [🗂 Configuring Microsoft.Graph](#-configuring-microsoftgraph)
   - [⏯ Usage](#-usage)
-    - [🤔 Example](#-example)
+    - [🤔 Examples](#-examples)
+      - [Example 01 - Get MFA methods for users licensed and not targeted with Identity Protection policies](#example-01---get-mfa-methods-for-users-licensed-and-not-targeted-with-identity-protection-policies)
+      - [Example 02 - Get MFA methods for a single user](#example-02---get-mfa-methods-for-a-single-user)
   - [📚 Resources](#-resources)
 
 This repo will contain a set of Azure AD MFA scripts for rolling out MFA to end-users. This is related to utilizing [Azure AD Identity Protection](https://docs.microsoft.com/en-us/azure/active-directory/identity-protection/overview-identity-protection) for a specific subset of users in your Azure AD tenant.
@@ -21,17 +23,17 @@ This repo will contain a set of Azure AD MFA scripts for rolling out MFA to end-
 ### 🧰 Requirements
 
 - [.NET SDK 5.0](https://dotnet.microsoft.com/download)
-    - ⚠️ **Since I have not supplied a prebuilt module yet, this will be a requirement to build.**
+  - ⚠️ **Since I have not supplied a prebuilt module yet, this will be a requirement to build.**
 - PowerShell
-    - ✅ **Recommended**: [PowerShell 7.0 or higher](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
-    - ⚠️ At the minimum, `Windows PowerShell 5.1` should work; however, I have not done any testing with it.
+  - ✅ **Recommended**: [PowerShell 7.0 or higher](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
+  - ⚠️ At the minimum, `Windows PowerShell 5.1` should work; however, I have not done any testing with it.
 - Platforms:
-    - **Windows 10**
-        - ✅ _Tested on the `20H2` feature update release_
-    - **macOS**
-        - ✅ _Tested on Big Sur `11.2.3`_
-    - **Linux**
-        - ⚠️ _Untested on any distro_
+  - **Windows 10**
+    - ✅ _Tested on the `20H2` feature update release_
+  - **macOS**
+    - ✅ _Tested on Big Sur `11.2.3`_
+  - **Linux**
+    - ⚠️ _Untested on any distro_
 
 #### ⚠️ Note for Windows users
 
@@ -68,6 +70,7 @@ For more information about the PowerShell Execution Policy, you can read the [of
 ## 🧾 PowerShell Dependencies
 
 This module is dependant on two modules (At the moment):
+
 - [Microsoft.Graph.Authentication](https://www.powershellgallery.com/packages/Microsoft.Graph.Authentication/)
 - [Microsoft.Graph.Groups](https://www.powershellgallery.com/packages/Microsoft.Graph.Groups/)
 - [Microsoft.Graph.Users](https://www.powershellgallery.com/packages/Microsoft.Graph.Users/)
